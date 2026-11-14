@@ -32,8 +32,10 @@ python3 view_stats.py
 3. **Check the videos**: flag missing descriptions, very long titles, missing tags
 4. **Let AI use it**: an MCP server so Claude can answer questions from the database
 5. **Test the AI**: 10 questions with known answers, and a score
+6. **Try BigQuery**: load the data into the free sandbox and rerun the `LAG` query
 
 ## What I learned
 
 - *Testing found a bug:* two runs in the same second got the same timestamp, so the "since last run" order was a coin toss. Fixed by ordering by `fetched_at, id`.
-- *[Add your own as you go: something that broke, something the AI got wrong, and what you'd do with real company data.]*
+-- *Key rotation:* I exposed my API key while setting up, so I rotated it in Google Cloud and deleted the old one. Keys now live only in an environment variable.
+- *Source refresh rate:* two runs a few minutes apart gave identical view counts. YouTube refreshes public counts periodically, so daily runs are enough.
