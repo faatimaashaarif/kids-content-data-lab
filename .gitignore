@@ -1,0 +1,7 @@
+# The database is made by running the code, so it doesn't belong in git
+*.db
+# Never commit secrets
+.env
+# Python's virtual environment and cache folders
+.venv/
+__pycache__/
