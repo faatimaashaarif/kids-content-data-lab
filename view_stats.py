@@ -26,7 +26,12 @@ SELECT
     view_count - LAG(view_count) OVER (
         PARTITION BY handle
         ORDER BY fetched_at, id
-    ) AS views_since_last_run
+    ) AS views_since_last_run,
+    video_count,
+    video_count - LAG(video_count) OVER (
+        PARTITION BY handle
+        ORDER BY fetched_at, id
+    ) AS videos_since_last_run
 FROM channel_stats
 ORDER BY channel_name, fetched_at, id;
 """
@@ -36,7 +41,8 @@ ORDER BY channel_name, fetched_at, id;
 
 def main():
     conn = sqlite3.connect(DB_FILE)                  # Step 1
-    rows = conn.execute(QUERY).fetchall()            # Step 2: a list of rows (tuples)
+    # Step 2: a list of rows (tuples)
+    rows = conn.execute(QUERY).fetchall()
     conn.close()
 
     if not rows:
@@ -44,10 +50,12 @@ def main():
         return
 
     # Step 3: print a header, then one line per row
-    print(f"{'Channel':<20} {'Fetched at (UTC)':<27} {'Views':>16} {'Since last run':>16}")
-    for name, fetched_at, views, change in rows:     # unpack each row into four names
+    print(f"{'Channel':<20} {'Fetched at (UTC)':<27} {'Views':>16} {'Since last run':>16} {'Videos':>8} {'New videos':>12}")
+    for name, fetched_at, views, change, videos, video_change in rows:     # unpack each row into four names
         change_text = f"{change:,}" if change is not None else "first run"
-        print(f"{name[:20]:<20} {fetched_at:<27} {views:>16,} {change_text:>16}")
+        video_change_text = f"{video_change:,}" if video_change is not None else "first run"
+        print(
+            f"{name[:20]:<20} {fetched_at:<27} {views:>16,} {change_text:>16} {videos:>8,} {video_change_text:>12}")
 
 
 if __name__ == "__main__":
