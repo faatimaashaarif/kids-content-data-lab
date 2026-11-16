@@ -41,3 +41,4 @@ python3 view_stats.py
 - *Key rotation:* I exposed my API key while setting up, so I rotated it in Google Cloud and deleted the old one. Keys now live only in an environment variable.
 - *Source refresh rate:* two runs a few minutes apart gave identical view counts. YouTube refreshes public counts periodically, so daily runs are enough.
 - *Quality checks caught a real issue on day 2:* CoComelon and Little Angel showed exactly the same view counts as the day before. That's not believable, so it's YouTube not refreshing its public counts yet. I made it a WARN rather than a FAIL, because the pipeline isn't broken but the number shouldn't be trusted on its own.
+- *Wrote my first change:* added a "new videos" column to view_stats.py. It showed Little Angel uploaded a video while its views stayed at 0, which proves the view count was stale on YouTube's side.
