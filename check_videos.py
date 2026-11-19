@@ -39,9 +39,11 @@ def check_no_description(conn):
     if not rows:
         return report("PASS", "No description", "every video has a description")
 
-    status = report("WARN", "No description", f"{len(rows)} video(s) have no description")
+    status = report("WARN", "No description",
+                    f"{len(rows)} video(s) have no description")
     for handle, title in rows:                     # list each flagged video underneath
-        print(f"      {handle}: {title[:60]}")     # [:60] keeps long titles tidy
+        # [:60] keeps long titles tidy
+        print(f"      {handle}: {title[:60]}")
     return status
 
 
@@ -55,13 +57,15 @@ def check_long_titles(conn):
         FROM videos
         WHERE LENGTH(title) > ? 
     """, (MAX_TITLE_LENGTH,)).fetchall()
-    
+
     if not rows:
         return report("PASS", "Long title", "every title is within limit")
 
-    status = report("WARN", "No title", f"{len(rows)} video(s) have title over limit")
+    status = report("WARN", "Long title",
+                    f"{len(rows)} video(s) have title over limit")
     for handle, title in rows:                     # list each flagged video underneath
-        print(f"      {handle}: {title[:60]}")     # [:60] keeps long titles tidy
+        # [:60] keeps long titles tidy
+        print(f"      {handle}: {title[:60]}")
     return status
 
 
@@ -82,7 +86,8 @@ def check_no_tags(conn):
 
     status = report("WARN", "No tags", f"{len(rows)} video(s) have no tags")
     for handle, title in rows:                     # list each flagged video underneath
-        print(f"      {handle}: {title[:60]}")     # [:60] keeps long titles tidy
+        # [:60] keeps long titles tidy
+        print(f"      {handle}: {title[:60]}")
     return status
 
 
@@ -111,7 +116,8 @@ def main():
 
     warns = results.count("WARN")
     todos = results.count("TODO")
-    print(f"\nSummary: {warns} warnings, {len(results) - warns - todos} passed, {todos} still to write")
+    print(
+        f"\nSummary: {warns} warnings, {len(results) - warns - todos} passed, {todos} still to write")
 
 
 if __name__ == "__main__":
